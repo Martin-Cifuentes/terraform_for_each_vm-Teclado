@@ -20,7 +20,7 @@ resource "azurerm_subnet" "main" {
 module "vm" {
     source = "./modules/vm"
     servers = var.servers
-    size_servers = "Standard_DS1_v2"
+    size_servers = "Standard_B2s"
     resource_group_name = azurerm_resource_group.main.name
     location = azurerm_resource_group.main.location
     subnet_id = azurerm_subnet.main.id

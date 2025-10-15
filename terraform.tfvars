@@ -1,4 +1,4 @@
-region="East US"
+region="eastus2"
 user = "adminuser"
 password = "#########"
 prefix_name = "devops"

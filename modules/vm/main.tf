@@ -4,6 +4,7 @@ resource "azurerm_public_ip" "devops_ip" {
     location            = var.location
     resource_group_name = var.resource_group_name
     allocation_method   = "Static"
+    sku                 = "Standard"
 }
 
 resource "azurerm_network_interface" "devops_nic" {
@@ -48,13 +49,35 @@ resource "azurerm_network_security_group" "devops_sg" {
         destination_address_prefix = "*"
     }
     security_rule {
-        name                       = "Sonar"
+        name                       = "Jenkins"
         priority                   = 1003
         direction                  = "Inbound"
         access                     = "Allow"
         protocol                   = "Tcp"
         source_port_range          = "*"
+        destination_port_range     = "8080"
+        source_address_prefix      = "*"
+        destination_address_prefix = "*"
+    }
+    security_rule {
+        name                       = "Sonar"
+        priority                   = 1004
+        direction                  = "Inbound"
+        access                     = "Allow"
+        protocol                   = "Tcp"
+        source_port_range          = "*"
         destination_port_range     = "9000"
+        source_address_prefix      = "*"
+        destination_address_prefix = "*"
+    }
+    security_rule {
+        name                       = "PostgreSQL"
+        priority                   = 1005
+        direction                  = "Inbound"
+        access                     = "Allow"
+        protocol                   = "Tcp"
+        source_port_range          = "*"
+        destination_port_range     = "5432"
         source_address_prefix      = "*"
         destination_address_prefix = "*"
     }
@@ -79,8 +102,8 @@ resource "azurerm_linux_virtual_machine" "vm_devops" {
 
     source_image_reference {
         publisher = "Canonical"
-        offer = "UbuntuServer"
-        sku = "16.04-LTS"
+        offer = "0001-com-ubuntu-server-jammy"
+        sku = "22_04-lts-gen2"
         version = "latest"
     }
 
